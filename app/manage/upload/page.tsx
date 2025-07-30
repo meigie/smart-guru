@@ -1,97 +1,110 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Navigation } from "@/components/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Upload, FileText, ArrowLeft } from "lucide-react"
-import Link from "next/link"
+import { useState } from 'react';
+import { Navigation } from '@/components/navigation';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Upload, FileText, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { revalidatePath } from 'next/cache';
 
 export default function UploadPage() {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [isUploading, setIsUploading] = useState(false)
-  const [uploadProgress, setUploadProgress] = useState(0)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
       // Check if file is a PowerPoint file
       const validTypes = [
         'application/vnd.ms-powerpoint',
-        'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-      ]
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      ];
 
-      if (validTypes.includes(file.type) || file.name.endsWith('.ppt') || file.name.endsWith('.pptx')) {
-        setSelectedFile(file)
+      if (
+        validTypes.includes(file.type) ||
+        file.name.endsWith('.ppt') ||
+        file.name.endsWith('.pptx')
+      ) {
+        setSelectedFile(file);
       } else {
-        alert('Please select a valid PowerPoint file (.ppt or .pptx)')
-        event.target.value = ''
+        alert('Please select a valid PowerPoint file (.ppt or .pptx)');
+        event.target.value = '';
       }
     }
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!selectedFile) {
-      alert('Please select a file to upload')
-      return
+      alert('Please select a file to upload');
+      return;
     }
 
-    setIsUploading(true)
-    setUploadProgress(0)
+    setIsUploading(true);
+    setUploadProgress(0);
 
     try {
       // Create FormData for file upload
-      const formData = new FormData()
-      formData.append('file', selectedFile)
+      const formData = new FormData();
+      formData.append('file', selectedFile);
 
       // Upload file to API
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
-      })
+      });
 
-      console.log(response)
+      console.log(response);
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Upload failed')
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Upload failed');
       }
 
-      const result = await response.json()
+      const result = await response.json();
 
       if (result.success) {
-        setUploadProgress(100)
+        setUploadProgress(100);
 
         // Store the processed slides data in sessionStorage for the presentation page
-        sessionStorage.setItem('processedSlides', JSON.stringify(result.slides))
-        sessionStorage.setItem('originalFile', result.originalFile)
+        sessionStorage.setItem(
+          'processedSlides',
+          JSON.stringify(result.slides)
+        );
+        sessionStorage.setItem('originalFile', result.originalFile);
 
         // Show success message and redirect
         setTimeout(() => {
-          alert('File uploaded and processed successfully!')
-          setSelectedFile(null)
-          setIsUploading(false)
-          setUploadProgress(0)
+          alert('File uploaded and processed successfully!');
+          setSelectedFile(null);
+          setIsUploading(false);
+          setUploadProgress(0);
           // Reset file input
-          const fileInput = document.getElementById('file-input') as HTMLInputElement
-          if (fileInput) fileInput.value = ''
+          const fileInput = document.getElementById(
+            'file-input'
+          ) as HTMLInputElement;
+          if (fileInput) fileInput.value = '';
           // Redirect to presentation page
-          window.location.href = '/manage/presentation'
-        }, 500)
+          window.location.href = '/manage/presentation';
+        }, 500);
       } else {
-        throw new Error(result.error || 'Processing failed')
+        throw new Error(result.error || 'Processing failed');
       }
-
     } catch (error) {
-      setIsUploading(false)
-      setUploadProgress(0)
-      alert(`Upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      setIsUploading(false);
+      setUploadProgress(0);
+      alert(
+        `Upload failed: ${
+          error instanceof Error ? error.message : 'Unknown error'
+        }`
+      );
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -107,8 +120,12 @@ export default function UploadPage() {
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Upload PowerPoint</h1>
-            <p className="text-gray-600">Upload your PowerPoint presentation (.ppt or .pptx)</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Upload PowerPoint
+            </h1>
+            <p className="text-gray-600">
+              Upload your PowerPoint presentation (.ppt or .pptx)
+            </p>
           </div>
         </div>
 
@@ -124,7 +141,10 @@ export default function UploadPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* File Upload Area */}
               <div>
-                <Label htmlFor="file-input" className="block text-sm font-medium text-gray-700 mb-2">
+                <Label
+                  htmlFor="file-input"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Select PowerPoint File
                 </Label>
                 <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-gray-400 transition-colors">
@@ -161,7 +181,9 @@ export default function UploadPage() {
                   <div className="flex items-center">
                     <FileText className="h-5 w-5 text-blue-600 mr-2" />
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-blue-900">{selectedFile.name}</p>
+                      <p className="text-sm font-medium text-blue-900">
+                        {selectedFile.name}
+                      </p>
                       <p className="text-sm text-blue-700">
                         {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                       </p>
@@ -171,9 +193,11 @@ export default function UploadPage() {
                       variant="outline"
                       size="sm"
                       onClick={() => {
-                        setSelectedFile(null)
-                        const fileInput = document.getElementById('file-input') as HTMLInputElement
-                        if (fileInput) fileInput.value = ''
+                        setSelectedFile(null);
+                        const fileInput = document.getElementById(
+                          'file-input'
+                        ) as HTMLInputElement;
+                        if (fileInput) fileInput.value = '';
                       }}
                       disabled={isUploading}
                     >
@@ -202,7 +226,11 @@ export default function UploadPage() {
               {/* Submit Button */}
               <div className="flex justify-end space-x-3">
                 <Link href="/manage">
-                  <Button type="button" variant="outline" disabled={isUploading}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={isUploading}
+                  >
                     Cancel
                   </Button>
                 </Link>
@@ -256,5 +284,5 @@ export default function UploadPage() {
         </Card>
       </main>
     </div>
-  )
-} 
+  );
+}

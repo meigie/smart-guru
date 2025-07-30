@@ -65,7 +65,11 @@ const mockRatings = [
   },
 ];
 
-export default function VideoPage({ params }: { params: { id: string } }) {
+export default function VideoPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const [userRating, setUserRating] = useState(0);
   const [userComment, setUserComment] = useState('');
   const [showRatingForm, setShowRatingForm] = useState(false);

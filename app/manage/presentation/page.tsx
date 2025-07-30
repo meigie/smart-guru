@@ -63,6 +63,33 @@ const mockSlides = [
   },
 ];
 
+const mockProcessedSlides = [
+  {
+    imagePath: '/uploads/slides/slide_1753872134628-1.jpg',
+    note: 'Hello everyone. I am Tester. Today, we’ll introduce how to use ppt presenter to create demo video from power point slides. ‹#›',
+  },
+  {
+    imagePath: '/uploads/slides/slide_1753872134628-2.jpg',
+    note: 'You need to have Python to run the script. First, follow instructions in README to install required packages. ‹#›',
+  },
+  {
+    imagePath: '/uploads/slides/slide_1753872134628-3.jpg',
+    note: 'Next, make your slides and take speaker’s note. ‹#›',
+  },
+  {
+    imagePath: '/uploads/slides/slide_1753872134628-4.jpg',
+    note: 'When you are finished, save your presentation, and also export your presentation into pdf format. ‹#›',
+  },
+  {
+    imagePath: '/uploads/slides/slide_1753872134628-5.jpg',
+    note: 'Finally, run the script specifying the path of your pptx and pdf files. You can run python, ppt presenter dot PY dash h to get help information. ‹#›',
+  },
+  {
+    imagePath: '/uploads/slides/slide_1753872134628-6.jpg',
+    note: 'You can open an issue on GitHub, if you encounter any problem. ‹#›',
+  },
+];
+
 export default function PresentationPage() {
   const [slides, setSlides] = useState(mockSlides);
   const [isEditing, setIsEditing] = useState(false);
@@ -83,7 +110,13 @@ export default function PresentationPage() {
 
   // Load processed slides from sessionStorage if available
   React.useEffect(() => {
-    const processedSlides = sessionStorage.getItem('processedSlides');
+    //temporary comment
+    //const processedSlides = sessionStorage.getItem('processedSlides');
+    // mock start
+    const processedSlidesStr = JSON.stringify(mockProcessedSlides);
+    const processedSlides = processedSlidesStr;
+    //mock end
+
     const originalFile = sessionStorage.getItem('originalFile');
 
     if (processedSlides) {
@@ -586,7 +619,7 @@ export default function PresentationPage() {
             </div>
             <div className="p-4">
               <Image
-                src={slides.find((s) => s.id === selectedSlide)?.imageUrl}
+                src={slides.find((s) => s.id === selectedSlide)?.imageUrl || ''}
                 alt={`Slide ${
                   slides.find((s) => s.id === selectedSlide)?.slideNumber
                 }`}

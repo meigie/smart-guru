@@ -15,7 +15,7 @@ export interface User {
 const passwordHash = bcrypt.hashSync('password123', 10);
 
 // Mock user database - in a real app, this would be a database
-export let users: User[] = [
+export const users: User[] = [
   {
     id: '1',
     email: 'admin@example.com',

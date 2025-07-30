@@ -1,56 +1,56 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { signIn, getSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Video, Eye, EyeOff } from "lucide-react"
+import { useState } from "react";
+import { signIn, getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Video, Eye, EyeOff } from "lucide-react";
 
 export default function SignInPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState("")
-  const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError("")
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
     try {
       const result = await signIn("credentials", {
         email,
         password,
         redirect: false,
-      })
+      });
       if (result?.error) {
-        console.log("Sign in error:", result.error)
+        console.log("Sign in error:", result.error);
         if (result.error === "CredentialsSignin") {
-          setError("Invalid email or password")
+          setError("Invalid email or password");
         } else {
-          setError(`Authentication failed: ${result.error}`)
+          setError(`Authentication failed: ${result.error}`);
         }
       } else {
         // Redirect to the page they were trying to access or home
-        const session = await getSession()
+        const session = await getSession();
         if (session?.user?.role === "ADMIN") {
-          router.push("/")
+          router.push("/");
         } else {
-          router.push("/")
+          router.push("/");
         }
       }
     } catch (error) {
-      setError("An error occurred. Please try again.")
+      setError("An error occurred. Please try again.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -124,11 +124,7 @@ export default function SignInPage() {
                 </div>
               </div>
 
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={isLoading}
-              >
+              <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Signing in..." : "Sign in"}
               </Button>
             </form>
@@ -139,17 +135,23 @@ export default function SignInPage() {
                   <div className="w-full border-t border-gray-300" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="bg-white px-2 text-gray-500">Demo Accounts</span>
+                  <span className="bg-white px-2 text-gray-500">
+                    Demo Accounts
+                  </span>
                 </div>
               </div>
               <div className="mt-4 space-y-2 text-sm text-gray-600">
-                <p><strong>Admin:</strong> admin@example.com / password123</p>
-                <p><strong>User:</strong> user@example.com / password123</p>
+                <p>
+                  <strong>Admin:</strong> admin@example.com / password123
+                </p>
+                <p>
+                  <strong>User:</strong> user@example.com / password123
+                </p>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
     </div>
-  )
-} 
+  );
+}
