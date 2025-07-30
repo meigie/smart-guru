@@ -13,6 +13,7 @@ export const POST = async (req: NextRequest) => {
     if (!file)
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
 
+     /**
     const uploadsDir = path.join(
       process.cwd(),
       "public",
@@ -63,7 +64,7 @@ export const POST = async (req: NextRequest) => {
     });
 
     // 4. Collect generated images
-    /**
+   
     const files = await fs.readdir(slidesDir);
     const slideImages = files
       .filter((f) => f.startsWith(`slide_${timestamp}`) && f.endsWith(".jpg"))
