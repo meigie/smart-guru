@@ -52,6 +52,9 @@ export const videoApi = {
   // Rate video
   rateVideo: (id: string, rating: number, comment?: string) =>
     api.post(`/videos/${id}/rate`, { rating, comment }),
+
+  // Mark video as completed
+  markCompleted: (id: string) => api.post(`/videos/${id}/complete`),
 }
 
 // Auth API
@@ -144,6 +147,21 @@ export const statsApi = {
 
   // Get user statistics
   getUserStats: (userId: string) => api.get(`/stats/users/${userId}`),
+}
+
+// Enrollment API
+export const enrollmentApi = {
+  // Check if user is enrolled in a course
+  checkEnrollment: (courseId: string) => api.get(`/enrollment/${courseId}/check`),
+
+  // Enroll user in a course
+  enroll: (courseId: string) => api.post(`/enrollment/${courseId}/enroll`),
+
+  // Unenroll user from a course
+  unenroll: (courseId: string) => api.delete(`/enrollment/${courseId}/enroll`),
+
+  // Get user's enrolled courses
+  getEnrolledCourses: () => api.get('/enrollment/courses'),
 }
 
 export default api 

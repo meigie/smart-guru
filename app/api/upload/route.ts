@@ -13,7 +13,6 @@ export const POST = async (req: NextRequest) => {
     if (!file)
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
 
-     /**
     const uploadsDir = path.join(
       process.cwd(),
       "public",
@@ -64,7 +63,7 @@ export const POST = async (req: NextRequest) => {
     });
 
     // 4. Collect generated images
-   
+
     const files = await fs.readdir(slidesDir);
     const slideImages = files
       .filter((f) => f.startsWith(`slide_${timestamp}`) && f.endsWith(".jpg"))
@@ -78,21 +77,13 @@ export const POST = async (req: NextRequest) => {
         { error: result.error || "Processing failed" },
         { status: 500 }
       );
-    } 
+    }
 
     // 6. Combine image paths and notes
     const slides = slideImages.map((imagePath, idx) => ({
       imagePath,
       note: result.slides[idx]?.transcript || "",
     }));
-    */
-    //mock for live
-    const slides = [
-      {
-        imagePath: "/uploads/slides/slide_1.jpg",
-        note: "This is the first slide",
-      },
-    ];
 
     return NextResponse.json({ success: true, slides });
   } catch (error) {

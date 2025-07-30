@@ -1,30 +1,30 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Navigation } from '@/components/navigation';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState } from "react";
+import { Navigation } from "@/components/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { ArrowLeft, Save, Play, Edit, Eye } from 'lucide-react';
-import Link from 'next/link';
-import { NextRequest, NextResponse } from 'next/server';
-import { VIDEO_CATEGORIES } from '@/lib/constants';
-import Image from 'next/image';
+} from "@/components/ui/select";
+import { ArrowLeft, Save, Play, Edit, Eye } from "lucide-react";
+import Link from "next/link";
+import { NextRequest, NextResponse } from "next/server";
+import { VIDEO_CATEGORIES } from "@/lib/constants";
+import Image from "next/image";
 
 // Mock data for presentation slides - in a real app, this would come from the uploaded file
 const mockSlides = [
   {
     id: 1,
     imageUrl:
-      'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=300&fit=crop',
+      "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=300&fit=crop",
     transcript:
       "Welcome to our training session on React Hooks. Today we'll explore the fundamentals of React Hooks and how they can transform your React applications.",
     slideNumber: 1,
@@ -32,15 +32,15 @@ const mockSlides = [
   {
     id: 2,
     imageUrl:
-      'https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&h=300&fit=crop',
+      "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&h=300&fit=crop",
     transcript:
-      'React Hooks were introduced in React 16.8 to allow you to use state and other React features without writing a class component.',
+      "React Hooks were introduced in React 16.8 to allow you to use state and other React features without writing a class component.",
     slideNumber: 2,
   },
   {
     id: 3,
     imageUrl:
-      'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop',
+      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop",
     transcript:
       "The useState hook is the most basic hook that allows you to add state to functional components. Let's see how it works.",
     slideNumber: 3,
@@ -48,45 +48,45 @@ const mockSlides = [
   {
     id: 4,
     imageUrl:
-      'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=400&h=300&fit=crop',
+      "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=400&h=300&fit=crop",
     transcript:
-      'useEffect is another important hook that lets you perform side effects in functional components, similar to componentDidMount and componentDidUpdate.',
+      "useEffect is another important hook that lets you perform side effects in functional components, similar to componentDidMount and componentDidUpdate.",
     slideNumber: 4,
   },
   {
     id: 5,
     imageUrl:
-      'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop',
+      "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop",
     transcript:
-      'Custom hooks allow you to extract component logic into reusable functions. This is one of the most powerful features of React Hooks.',
+      "Custom hooks allow you to extract component logic into reusable functions. This is one of the most powerful features of React Hooks.",
     slideNumber: 5,
   },
 ];
 
 const mockProcessedSlides = [
   {
-    imagePath: '/uploads/slides/slide_1753872134628-1.jpg',
-    note: 'Hello everyone. I am Tester. Today, we’ll introduce how to use ppt presenter to create demo video from power point slides. ‹#›',
+    imagePath: "/uploads/slides/slide_1753872134628-1.jpg",
+    note: "Hello everyone. I am Tester. Today, we’ll introduce how to use ppt presenter to create demo video from power point slides. ‹#›",
   },
   {
-    imagePath: '/uploads/slides/slide_1753872134628-2.jpg',
-    note: 'You need to have Python to run the script. First, follow instructions in README to install required packages. ‹#›',
+    imagePath: "/uploads/slides/slide_1753872134628-2.jpg",
+    note: "You need to have Python to run the script. First, follow instructions in README to install required packages. ‹#›",
   },
   {
-    imagePath: '/uploads/slides/slide_1753872134628-3.jpg',
-    note: 'Next, make your slides and take speaker’s note. ‹#›',
+    imagePath: "/uploads/slides/slide_1753872134628-3.jpg",
+    note: "Next, make your slides and take speaker’s note. ‹#›",
   },
   {
-    imagePath: '/uploads/slides/slide_1753872134628-4.jpg',
-    note: 'When you are finished, save your presentation, and also export your presentation into pdf format. ‹#›',
+    imagePath: "/uploads/slides/slide_1753872134628-4.jpg",
+    note: "When you are finished, save your presentation, and also export your presentation into pdf format. ‹#›",
   },
   {
-    imagePath: '/uploads/slides/slide_1753872134628-5.jpg',
-    note: 'Finally, run the script specifying the path of your pptx and pdf files. You can run python, ppt presenter dot PY dash h to get help information. ‹#›',
+    imagePath: "/uploads/slides/slide_1753872134628-5.jpg",
+    note: "Finally, run the script specifying the path of your pptx and pdf files. You can run python, ppt presenter dot PY dash h to get help information. ‹#›",
   },
   {
-    imagePath: '/uploads/slides/slide_1753872134628-6.jpg',
-    note: 'You can open an issue on GitHub, if you encounter any problem. ‹#›',
+    imagePath: "/uploads/slides/slide_1753872134628-6.jpg",
+    note: "You can open an issue on GitHub, if you encounter any problem. ‹#›",
   },
 ];
 
@@ -97,37 +97,35 @@ export default function PresentationPage() {
   const [selectedSlide, setSelectedSlide] = useState<number | null>(null);
   const [isNewPresentation, setIsNewPresentation] = useState(false);
   const [formData, setFormData] = useState({
-    title: 'Introduction to React Hooks',
+    title: "Introduction to React Hooks",
     description:
-      'Learn the basics of React Hooks and how to use them effectively in your applications. This comprehensive tutorial covers useState, useEffect, useContext, and custom hooks.',
-    category: 'React',
+      "Learn the basics of React Hooks and how to use them effectively in your applications. This comprehensive tutorial covers useState, useEffect, useContext, and custom hooks.",
+    category: "React",
     year: new Date().getFullYear().toString(),
-    authorName: 'John Doe',
-    authorEmail: 'john@example.com',
-    duration: '30',
-    status: 'draft',
+    authorName: "John Doe",
+    authorEmail: "john@example.com",
+    duration: "30",
+    status: "draft",
   });
 
   // Load processed slides from sessionStorage if available
   React.useEffect(() => {
-    //temporary comment
-    //const processedSlides = sessionStorage.getItem('processedSlides');
+    const processedSlides = sessionStorage.getItem("processedSlides");
+    const originalFile = sessionStorage.getItem("originalFile");
     // mock start
-    const processedSlidesStr = JSON.stringify(mockProcessedSlides);
-    const processedSlides = processedSlidesStr;
+    // const processedSlidesStr = JSON.stringify(mockProcessedSlides);
+    // const processedSlides = processedSlidesStr;
     //mock end
-
-    const originalFile = sessionStorage.getItem('originalFile');
 
     if (processedSlides) {
       try {
         const slidesData = JSON.parse(processedSlides);
-        console.log('Loaded slides from sessionStorage:', slidesData);
+        console.log("Loaded slides from sessionStorage:", slidesData);
         // Map new API format to expected structure
         const mappedSlides = slidesData.map((slide: any, idx: number) => ({
           id: idx + 1,
           imageUrl: slide.imagePath || slide.imageUrl,
-          transcript: slide.note || slide.transcript || '',
+          transcript: slide.note || slide.transcript || "",
           slideNumber: idx + 1,
         }));
         setSlides(mappedSlides);
@@ -135,18 +133,18 @@ export default function PresentationPage() {
         setIsNewPresentation(true);
         setFormData((prev) => ({
           ...prev,
-          status: 'draft',
+          status: "draft",
           year: new Date().getFullYear().toString(),
         }));
         // Clear sessionStorage after loading
-        sessionStorage.removeItem('processedSlides');
-        sessionStorage.removeItem('originalFile');
+        sessionStorage.removeItem("processedSlides");
+        sessionStorage.removeItem("originalFile");
       } catch (error) {
-        console.error('Error loading processed slides:', error);
+        console.error("Error loading processed slides:", error);
       }
     } else {
       console.log(
-        'No processed slides found in sessionStorage, using mock data'
+        "No processed slides found in sessionStorage, using mock data"
       );
     }
   }, []);
@@ -161,7 +159,7 @@ export default function PresentationPage() {
 
   const handleFormChange = (field: string, value: string) => {
     // Prevent changes to status and year for new presentations
-    if (isNewPresentation && (field === 'status' || field === 'year')) {
+    if (isNewPresentation && (field === "status" || field === "year")) {
       return;
     }
 
@@ -169,7 +167,7 @@ export default function PresentationPage() {
       const updatedData = { ...prev, [field]: value };
 
       // If status is changing to draft, set year to current year
-      if (field === 'status' && value === 'draft') {
+      if (field === "status" && value === "draft") {
         updatedData.year = new Date().getFullYear().toString();
       }
 
@@ -179,17 +177,17 @@ export default function PresentationPage() {
 
   const handleSave = () => {
     // In a real app, this would save to your backend
-    console.log('Saving presentation:', { slides, formData });
+    console.log("Saving presentation:", { slides, formData });
     setIsEditing(false);
     setIsNewPresentation(false); // Allow editing status and year after saving
-    alert('Presentation saved successfully!');
+    alert("Presentation saved successfully!");
   };
 
   const handlePublish = () => {
     // In a real app, this would publish the video
-    console.log('Publishing video:', { slides, formData });
+    console.log("Publishing video:", { slides, formData });
     setIsNewPresentation(false); // Allow editing status and year after publishing
-    alert('Video published successfully!');
+    alert("Video published successfully!");
   };
 
   return (
@@ -222,7 +220,7 @@ export default function PresentationPage() {
               className="flex items-center"
             >
               <Edit className="h-4 w-4 mr-2" />
-              {isEditing ? 'Preview' : 'Edit'}
+              {isEditing ? "Preview" : "Edit"}
             </Button>
             <Button onClick={handleSave} className="flex items-center">
               <Save className="h-4 w-4 mr-2" />
@@ -242,7 +240,7 @@ export default function PresentationPage() {
         {/* Debug Info */}
         {slides.length > 0 &&
           slides[0].imageUrl &&
-          slides[0].imageUrl.includes('/uploads/') && (
+          slides[0].imageUrl.includes("/uploads/") && (
             <Card className="mb-6 bg-blue-50 border-blue-200">
               <CardHeader>
                 <CardTitle className="text-blue-800">
@@ -260,7 +258,7 @@ export default function PresentationPage() {
                     <span className="ml-2 text-green-600">
                       {
                         slides.filter(
-                          (s) => s.imageUrl && s.imageUrl.includes('/uploads/')
+                          (s) => s.imageUrl && s.imageUrl.includes("/uploads/")
                         ).length
                       }
                     </span>
@@ -392,13 +390,13 @@ export default function PresentationPage() {
                           ) : (
                             <div className="w-full h-32 px-3 py-2 border border-gray-200 rounded-md bg-gray-50 text-gray-700 overflow-y-auto text-sm">
                               {slide.transcript ||
-                                'No transcript available for this slide.'}
+                                "No transcript available for this slide."}
                             </div>
                           )}
                           <div className="mt-2 text-xs text-gray-500">
                             {slide.transcript
                               ? `${slide.transcript.length} characters`
-                              : 'No content'}
+                              : "No content"}
                           </div>
                         </div>
                       </div>
@@ -423,7 +421,7 @@ export default function PresentationPage() {
                       id="title"
                       value={formData.title}
                       onChange={(e) =>
-                        handleFormChange('title', e.target.value)
+                        handleFormChange("title", e.target.value)
                       }
                       placeholder="Enter video title"
                     />
@@ -435,7 +433,7 @@ export default function PresentationPage() {
                       id="description"
                       value={formData.description}
                       onChange={(e) =>
-                        handleFormChange('description', e.target.value)
+                        handleFormChange("description", e.target.value)
                       }
                       placeholder="Enter video description"
                       className="w-full h-24 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
@@ -448,7 +446,7 @@ export default function PresentationPage() {
                       <Select
                         value={formData.category}
                         onValueChange={(value) =>
-                          handleFormChange('category', value)
+                          handleFormChange("category", value)
                         }
                       >
                         <SelectTrigger>
@@ -471,15 +469,15 @@ export default function PresentationPage() {
                         type="number"
                         value={formData.year}
                         onChange={(e) =>
-                          handleFormChange('year', e.target.value)
+                          handleFormChange("year", e.target.value)
                         }
                         min="2020"
                         max={new Date().getFullYear() + 1}
                         disabled={isNewPresentation}
                         className={
                           isNewPresentation
-                            ? 'bg-gray-100 cursor-not-allowed'
-                            : ''
+                            ? "bg-gray-100 cursor-not-allowed"
+                            : ""
                         }
                       />
                     </div>
@@ -492,7 +490,7 @@ export default function PresentationPage() {
                       type="number"
                       value={formData.duration}
                       onChange={(e) =>
-                        handleFormChange('duration', e.target.value)
+                        handleFormChange("duration", e.target.value)
                       }
                       placeholder="30"
                       min="1"
@@ -504,15 +502,15 @@ export default function PresentationPage() {
                     <Select
                       value={formData.status}
                       onValueChange={(value) =>
-                        handleFormChange('status', value)
+                        handleFormChange("status", value)
                       }
                       disabled={isNewPresentation}
                     >
                       <SelectTrigger
                         className={
                           isNewPresentation
-                            ? 'bg-gray-100 cursor-not-allowed'
-                            : ''
+                            ? "bg-gray-100 cursor-not-allowed"
+                            : ""
                         }
                       >
                         <SelectValue />
@@ -540,7 +538,7 @@ export default function PresentationPage() {
                           id="authorName"
                           value={formData.authorName}
                           onChange={(e) =>
-                            handleFormChange('authorName', e.target.value)
+                            handleFormChange("authorName", e.target.value)
                           }
                           placeholder="Enter author name"
                         />
@@ -553,7 +551,7 @@ export default function PresentationPage() {
                           type="email"
                           value={formData.authorEmail}
                           onChange={(e) =>
-                            handleFormChange('authorEmail', e.target.value)
+                            handleFormChange("authorEmail", e.target.value)
                           }
                           placeholder="Enter author email"
                         />
@@ -583,13 +581,13 @@ export default function PresentationPage() {
                     <span className="text-gray-600">Status:</span>
                     <span
                       className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        formData.status === 'published'
-                          ? 'bg-green-100 text-green-800'
-                          : formData.status === 'draft'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : formData.status === 'pending_review'
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-gray-100 text-gray-800'
+                        formData.status === "published"
+                          ? "bg-green-100 text-green-800"
+                          : formData.status === "draft"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : formData.status === "pending_review"
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-gray-100 text-gray-800"
                       }`}
                     >
                       {formData.status}
@@ -608,7 +606,7 @@ export default function PresentationPage() {
           <div className="bg-white rounded-lg max-w-4xl max-h-full overflow-auto">
             <div className="flex justify-between items-center p-4 border-b">
               <h3 className="text-lg font-semibold">
-                Slide {slides.find((s) => s.id === selectedSlide)?.slideNumber}{' '}
+                Slide {slides.find((s) => s.id === selectedSlide)?.slideNumber}{" "}
               </h3>
               <button
                 onClick={() => setSelectedSlide(null)}
@@ -619,7 +617,7 @@ export default function PresentationPage() {
             </div>
             <div className="p-4">
               <Image
-                src={slides.find((s) => s.id === selectedSlide)?.imageUrl || ''}
+                src={slides.find((s) => s.id === selectedSlide)?.imageUrl || ""}
                 alt={`Slide ${
                   slides.find((s) => s.id === selectedSlide)?.slideNumber
                 }`}

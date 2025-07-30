@@ -39,6 +39,9 @@ export default function SignInPage() {
       } else {
         // Redirect to the page they were trying to access or home
         const session = await getSession();
+        
+        console.log("session", session);
+
         if (session?.user?.role === "ADMIN") {
           router.push("/");
         } else {

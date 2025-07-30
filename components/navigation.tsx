@@ -1,36 +1,36 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import { useSession, signOut } from "next-auth/react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Video, List, Upload, Home, Search, LogOut } from "lucide-react"
-import { useSearch } from "@/lib/contexts/search-context"
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Video, List, Upload, Home, Search, LogOut } from "lucide-react";
+import { useSearch } from "@/lib/contexts/search-context";
 
 const navigation = [
   { name: "Home", href: "/", icon: Home, adminOnly: false },
   { name: "Videos", href: "/videos", icon: List, adminOnly: false },
   { name: "Manage", href: "/manage", icon: Upload, adminOnly: true },
-]
+];
 
 export function Navigation() {
-  const pathname = usePathname()
-  const router = useRouter()
-  const { data: session, status } = useSession()
-  const { searchTerm, setSearchTerm } = useSearch()
+  const pathname = usePathname();
+  const router = useRouter();
+  const { data: session, status } = useSession();
+  const { searchTerm, setSearchTerm } = useSearch();
 
   const handleSignOut = () => {
-    signOut({ callbackUrl: "/" })
-  }
+    signOut({ callbackUrl: "/" });
+  };
 
   const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (searchTerm.trim()) {
-      router.push("/videos")
+      router.push("/videos");
     }
-  }
+  };
 
   return (
     <nav className="bg-white shadow-sm border-b">
@@ -47,13 +47,14 @@ export function Navigation() {
               {navigation
                 .filter((item) => {
                   // Hide admin-only items from non-authenticated users
-                  if (item.adminOnly && !session) return false
+                  if (item.adminOnly && !session) return false;
                   // Show admin-only items only to admin users
-                  if (item.adminOnly && session?.user?.role !== "ADMIN") return false
-                  return true
+                  if (item.adminOnly && session?.user?.role !== "ADMIN")
+                    return false;
+                  return true;
                 })
                 .map((item) => {
-                  const Icon = item.icon
+                  const Icon = item.icon;
                   return (
                     <Link
                       key={item.name}
@@ -68,7 +69,7 @@ export function Navigation() {
                       <Icon className="h-4 w-4 mr-2" />
                       {item.name}
                     </Link>
-                  )
+                  );
                 })}
             </div>
           </div>
@@ -91,8 +92,8 @@ export function Navigation() {
             {status === "loading" ? (
               <div className="text-sm text-gray-500">Loading...</div>
             ) : session ? (
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 onClick={handleSignOut}
                 className="flex items-center"
@@ -106,7 +107,7 @@ export function Navigation() {
                   <Link href="/auth/signin">Sign In</Link>
                 </Button> */}
                 <Button size="sm" asChild>
-                  <Link href="/auth/signup">Sign Up</Link>
+                  <Link href="/auth/signin">Sign In</Link>
                 </Button>
               </>
             )}
@@ -114,5 +115,5 @@ export function Navigation() {
         </div>
       </div>
     </nav>
-  )
-} 
+  );
+}
