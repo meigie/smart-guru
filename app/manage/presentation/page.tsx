@@ -110,11 +110,11 @@ export default function PresentationPage() {
 
   // Load processed slides from sessionStorage if available
   React.useEffect(() => {
-    const processedSlides = sessionStorage.getItem("processedSlides");
+    //const processedSlides = sessionStorage.getItem("processedSlides");
     const originalFile = sessionStorage.getItem("originalFile");
     // mock start
-    // const processedSlidesStr = JSON.stringify(mockProcessedSlides);
-    // const processedSlides = processedSlidesStr;
+    const processedSlidesStr = JSON.stringify(mockProcessedSlides);
+    const processedSlides = processedSlidesStr;
     //mock end
 
     if (processedSlides) {
